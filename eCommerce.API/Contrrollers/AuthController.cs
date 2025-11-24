@@ -1,6 +1,7 @@
 ﻿using eCommerce.Core.DTOs;
 using eCommerce.Core.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.WebSockets;
 
 namespace eCommerce.API.Contrrollers
 {
@@ -9,9 +10,11 @@ namespace eCommerce.API.Contrrollers
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
-        public AuthController(IUserService userService)
+        private readonly ITokenService _tokenService;
+        public AuthController(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -20,14 +23,15 @@ namespace eCommerce.API.Contrrollers
             if (registerRequest == null)
                 NullRequest();
 
-            var response = await _userService.Register(registerRequest!);
+            var registerResponse = await _userService.Register(registerRequest!);
 
-            if (response == null || !response.IsSuccess)
+            if (registerResponse == null || !registerResponse.IsSuccess)
                 return Problem(
                     title: "Registratioon Failed",
                     detail: "Unable to register user",
                     statusCode: StatusCodes.Status400BadRequest);
 
+            var response = _tokenService.GenerateToken(registerResponse);
             return Ok(response);
         }
 
@@ -37,14 +41,15 @@ namespace eCommerce.API.Contrrollers
             if (loginRequest == null)
                 NullRequest();
 
-            var response = await _userService.Login(loginRequest!);
+            var loginResponse = await _userService.Login(loginRequest!);
 
-            if (response == null || !response.IsSuccess)
+            if (loginResponse == null || !loginResponse.IsSuccess)
                 return Problem(
                     title: "Login Failed",
                     detail: "Unable to login user",
                     statusCode: StatusCodes.Status401Unauthorized);
 
+            var response = _tokenService.GenerateToken(loginResponse);
             return Ok(response);
         }
 

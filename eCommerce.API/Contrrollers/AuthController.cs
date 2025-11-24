@@ -18,7 +18,7 @@ namespace eCommerce.API.Contrrollers
         public async Task<IActionResult> Register(RegisterDTO registerRequest)
          {
             if (registerRequest == null)
-                NullRequest(); 
+                NullRequest();
 
             var response = await _userService.Register(registerRequest!);
 

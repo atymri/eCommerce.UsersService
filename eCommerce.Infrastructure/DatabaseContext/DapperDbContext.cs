@@ -10,8 +10,12 @@ internal class DapperDbContext
     public DapperDbContext(IConfiguration configuration)
     {
         _configuration = configuration;
-        var connectionString = _configuration.GetConnectionString("PostgresConnection")
+        var connectionStringTemplate = _configuration.GetConnectionString("PostgresConnection")
             ?? throw new KeyNotFoundException("Connection string was not found.");
+
+        var connectionString = connectionStringTemplate
+            .Replace("$POSTGRES_HOST", Environment.GetEnvironmentVariable("POSTGRES_HOST"))
+            .Replace("$POSTGRES_PASS", Environment.GetEnvironmentVariable("POSTGRES_PASS");
 
         _dbConnection = new NpgsqlConnection(connectionString);
     }

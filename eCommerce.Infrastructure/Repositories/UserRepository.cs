@@ -17,8 +17,8 @@ internal class UserRepository : IUserRepository
         user.UserId = Guid.NewGuid();
 
         var query =
-            "INSERT INTO public.\"Users\" (\"UserId\", \"Email\", \"PhoneNumber\", \"Password\", \"PersonName\", \"Gender\") " + 
-            "VALUES (@UserId, @Email, @PhoneNumber ,@Password, @PersonName, @Gender);";
+            "INSERT INTO public.\"Users\" (\"UserId\", \"Email\", \"Password\", \"PersonName\", \"Gender\") " + 
+            "VALUES (@UserId, @Email ,@Password, @PersonName, @Gender);";
 
         var rowsEffected = await _context.DbConnection.ExecuteAsync(query, user);
         return rowsEffected > 0 ? user : null;

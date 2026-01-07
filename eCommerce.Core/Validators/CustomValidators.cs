@@ -8,12 +8,5 @@ public static class CustomValidators
         var emailDomain = email.Split('@').Last();
         return validDomains.Contains(emailDomain);
     }
-
-    public static bool BeValidPhone(string phoneNumber)
-    {
-        var validPrefixes = "09";
-        var phonePrefix = phoneNumber.Substring(0, 2);
-        return validPrefixes.Equals(phonePrefix);
-    }
 }
 

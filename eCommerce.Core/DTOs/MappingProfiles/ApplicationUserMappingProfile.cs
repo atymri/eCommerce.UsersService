@@ -15,6 +15,12 @@ public class ApplicationUserMappingProfile : Profile
             .ForMember(dst => dst.IsSuccess, opt => opt.Ignore())
             .ForMember(dst => dst.Token, opt => opt.Ignore());
 
+        CreateMap<ApplicationUser, UserResponse>()
+            .ForMember(dst => dst.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))
+            .ForMember(dst => dst.PersonName, opt => opt.MapFrom(src => src.PersonName))
+            .ForMember(dst => dst.Gender, opt => opt.MapFrom(src => src.Gender));
+
         CreateMap<RegisterDTO, ApplicationUser>()
             .ForMember(dst => dst.UserId, opt => opt.Ignore())
             .ForMember(dst => dst.Email, opt => opt.MapFrom(src => src.Email))

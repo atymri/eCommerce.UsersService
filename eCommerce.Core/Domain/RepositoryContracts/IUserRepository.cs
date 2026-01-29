@@ -10,5 +10,6 @@ public interface IUserRepository
 {
     Task<ApplicationUser?> AddUser(ApplicationUser user);
     Task<ApplicationUser?> FindUserByEmailAndPassword(string? email, string? password);
+    Task<ApplicationUser?> GetUserByUserID(Guid userId);
 }
 

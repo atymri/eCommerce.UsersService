@@ -2,6 +2,7 @@
 using eCommerce.Core.Domain.Entities;
 using eCommerce.Core.Domain.RepositoryContracts;
 using eCommerce.Infrastructure.DatabaseContext;
+using Microsoft.IdentityModel.Tokens;
 
 namespace eCommerce.Infrastructure.Repositories;
 
@@ -31,11 +32,25 @@ internal class UserRepository : IUserRepository
             "FROM public.\"Users\" " +
             "WHERE \"Password\"=@Password AND \"Email\"=@Email;";
 
-        var user = await _context.DbConnection.QueryFirstOrDefaultAsync<ApplicationUser>(query, new
+        var user = await _context.DbConnection
+            .QueryFirstOrDefaultAsync<ApplicationUser>(query, new
         {
             Password = password,
             Email = email
         });
+
+        return user;
+    }
+
+    public async Task<ApplicationUser?> GetUserByUserID(Guid userId)
+    {
+        var query =
+            "SELECT * " +
+            "FROM public.\"Users\" " +
+            "WHERE \"UserId\"=@UserId";
+
+        var user = await _context.DbConnection
+            .QueryFirstOrDefaultAsync<ApplicationUser>(query, new { UserId = userId });
 
         return user;
     }

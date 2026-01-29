@@ -1,0 +1,28 @@
+services:
+  postgres-service:
+    image: postgres:latest
+    ports:
+      - "12345:54321"
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_PASSWORD=former_age7
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=eCommerceUsers
+    networks:
+      - users-network
+
+  users-service:
+    image: amirtymri/users-service:v1.0
+    ports:
+      - "9090:9090"
+      - "9091:9091"
+    environment:
+      - POSTGRES_HOST=postgres-service
+      - POSTGRES_PASS=former_age7
+    networks:
+      - users-network
+
+networks:
+  users-network:
+    driver: bridge

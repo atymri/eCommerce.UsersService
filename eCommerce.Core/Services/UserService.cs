@@ -3,6 +3,7 @@ using eCommerce.Core.Domain.Entities;
 using eCommerce.Core.Domain.RepositoryContracts;
 using eCommerce.Core.DTOs;
 using eCommerce.Core.ServiceContracts;
+using System.Net.WebSockets;
 
 namespace eCommerce.Core.Services;
 
@@ -40,6 +41,15 @@ internal class UserService : IUserService
         return user is not null 
             ?_mapper.Map<AuthResponse>(user) with { IsSuccess = true, Token = "token"}
             : null;
+    }
+
+    public async Task<UserResponse?> FindUserByID(Guid userId)
+    {
+        var user = await _userRepository.GetUserByUserID(userId);
+        if (user is null)
+            return null;
+
+        return _mapper.Map<UserResponse>(user);
     }
 
     public string HashPassword(string password)
